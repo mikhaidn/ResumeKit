@@ -1,4 +1,4 @@
-# Resume Kit
+# ResumeKit
 
 Write a clean, **one-page** resume in a plain text file and turn it into a PDF with one command.
 
@@ -11,8 +11,8 @@ You'll type a few commands into **Terminal** (on a Mac: press `⌘ Space`, type 
 **1. Get the kit**, then go into its folder:
 
 ```bash
-git clone https://github.com/mikhaidn/resume_kit.git
-cd resume_kit
+git clone https://github.com/mikhaidn/ResumeKit.git
+cd ResumeKit
 ```
 
 **2. Install what it needs** (one time only, takes a few minutes):

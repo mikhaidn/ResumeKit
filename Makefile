@@ -1,4 +1,4 @@
-# Resume Kit — run `make help` to see what's available.
+# ResumeKit — run `make help` to see what's available.
 
 # Your resume lives here (gitignored). Falls back to the example until you run `make start`.
 MY_RESUME := private/resume.md
@@ -16,7 +16,7 @@ STAMP := $(VENV)/.installed
 .PHONY: help setup start resume open example clean
 
 help:
-	@echo "Resume Kit"
+	@echo "ResumeKit"
 	@echo ""
 	@echo "  make setup    Install everything needed (one time)"
 	@echo "  make start    Copy the example to $(MY_RESUME) for you to edit"
