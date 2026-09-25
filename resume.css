@@ -1,0 +1,199 @@
+@page {
+  size: letter;
+  margin: 0.32in 0.48in;
+}
+
+/* Spacing knob: build.sh auto-tunes --fill so the resume fills exactly one page.
+   1 = the spacing below as written; >1 spreads out, <1 tightens up. */
+:root { --fill: 1; }
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Charter", "Georgia", "Times New Roman", serif;
+  font-size: 10pt;
+  line-height: calc(1.22 + (var(--fill) - 1) * 0.12);
+  color: #2a2a2a;
+  background: white;
+}
+
+/* Name */
+h1 {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 22pt;
+  font-weight: 700;
+  margin: 0 0 calc(1pt * var(--fill)) 0;
+  letter-spacing: 0.2pt;
+  color: #111;
+  border-bottom: none;
+}
+
+/* Section headers (Experience, Projects, Skills, Education) */
+h2 {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.4pt;
+  margin: calc(4pt * var(--fill)) 0 calc(1pt * var(--fill)) 0;
+  padding-bottom: calc(2pt * var(--fill));
+  border-bottom: 0.75pt solid #111;
+  color: #111;
+}
+
+/* The h2 right after your name is the job-title subtitle */
+h1 + h2 {
+  font-size: 11.5pt;
+  font-weight: 400;
+  font-style: italic;
+  color: #666;
+  text-transform: none;
+  letter-spacing: 0.1pt;
+  border-bottom: none;
+  padding: 0;
+  margin: 0 0 calc(6pt * var(--fill)) 0;
+}
+
+header.title, h1.title { display: none; }
+
+p { margin: calc(2pt * var(--fill)) 0; color: #2a2a2a; }
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: calc(4pt * var(--fill)) 0 calc(2pt * var(--fill)) 0;
+  border: none;
+}
+table th, table td {
+  border: none;
+  padding: 0;
+  vertical-align: top;
+}
+thead, tbody, tr { border: none !important; }
+thead { display: none; }
+
+/* Contact line */
+body > table:first-of-type {
+  margin: calc(1pt * var(--fill)) 0 calc(6pt * var(--fill)) 0;
+}
+body > table:first-of-type td {
+  text-align: left !important;
+  font-size: 10pt;
+  padding: 0 3pt;
+  color: #333;
+}
+body > table:first-of-type td:first-child { padding-left: 0; }
+body > table:first-of-type td:nth-child(even) {
+  color: #bbb;
+  font-weight: 300;
+}
+
+/* Experience/Education header tables */
+body > table:not(:first-of-type) {
+  margin: calc(4pt * var(--fill)) 0 calc(1pt * var(--fill)) 0;
+}
+body > table:not(:first-of-type) td:first-child {
+  text-align: left;
+  font-size: 11pt;
+  color: #111;
+}
+body > table:not(:first-of-type) td:first-child strong {
+  font-size: 11.25pt;
+}
+body > table:not(:first-of-type) td:last-child {
+  text-align: right;
+  white-space: nowrap;
+  font-size: 9.75pt;
+  color: #555;
+  font-style: italic;
+}
+
+/* === Default top-level uls: clean bulleted lists === */
+body > ul {
+  list-style: none;
+  padding-left: 0;
+  margin: calc(3pt * var(--fill)) 0 calc(2pt * var(--fill)) 0;
+}
+
+body > ul > li {
+  position: relative;
+  padding-left: 11pt;
+  margin: calc(1.5pt * var(--fill)) 0;
+  color: #2a2a2a;
+}
+body > ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 1pt;
+  top: -0.5pt;
+  color: #888;
+  font-size: 10pt;
+}
+
+/* === Sub-section li (has a nested ul) — treat as sub-header === */
+body > ul > li:has(> ul) {
+  padding-left: 0;
+  margin: calc(3pt * var(--fill)) 0 0 0;
+}
+body > ul > li:has(> ul)::before {
+  content: none;
+}
+body > ul > li:has(> ul) > strong:first-child {
+  display: block;
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 calc(2pt * var(--fill)) 0;
+  letter-spacing: 0.15pt;
+}
+
+/* Nested ul inside sub-section */
+body > ul > li > ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+body > ul > li > ul > li {
+  position: relative;
+  padding-left: 11pt;
+  margin: calc(1.5pt * var(--fill)) 0;
+  color: #2a2a2a;
+}
+body > ul > li > ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 1pt;
+  top: -0.5pt;
+  color: #888;
+  font-size: 10pt;
+}
+
+/* Links */
+a { color: #222; text-decoration: none; }
+strong { font-weight: 700; color: #111; }
+em { font-style: italic; }
+
+/* Page break */
+h1, h2 { page-break-after: avoid; }
+li, table { page-break-inside: avoid; }
+body > ul > li { page-break-inside: avoid; }
+
+/* Compact Skills section: inline the bullets */
+h2#skills + ul {
+  list-style: none;
+  padding-left: 0;
+  margin: calc(4pt * var(--fill)) 0 calc(2pt * var(--fill)) 0;
+}
+h2#skills + ul li {
+  display: block;
+  position: relative;
+  padding-left: 0;
+  margin: calc(1.5pt * var(--fill)) 0;
+}
+h2#skills + ul li::before {
+  content: none;
+}

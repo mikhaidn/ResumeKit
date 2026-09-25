@@ -1,0 +1,16 @@
+# Personal resumes — keep your real content here, out of git
+private/
+
+# Build outputs
+*.pdf
+*.html
+output/
+
+# Python
+venv/
+.venv/
+__pycache__/
+
+# OS / editor
+.DS_Store
+.claude/settings.local.json
