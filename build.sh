@@ -11,6 +11,8 @@
 #   - output/YYYY-MM-DD-HH-mm/foo.pdf (versioned copy)
 # Spacing is auto-tuned (via the --fill knob in resume.css) to fill exactly one page;
 # it warns if the content cannot fit on one page. FILL=1 ./build.sh disables tuning.
+# Each <div class="page-break"></div> in the .md adds one page to the target.
+# If foo.css sits next to foo.md, it is layered on top of resume.css (a per-resume theme).
 
 set -e
 
@@ -41,22 +43,31 @@ for SRC in "$@"; do
 
     echo "→ Building ${SRC}..."
 
+    # Optional per-resume theme layered over the base CSS
+    CSS_ARGS=(--css "$CSS")
+    [[ -f "${BASE}.css" ]] && CSS_ARGS+=(--css "${BASE}.css")
+
+    # Target page count = 1 + number of explicit page breaks
+    BREAKS=$(grep -c 'class="page-break"' "$SRC" || true)
+    TARGET_PAGES=$((BREAKS + 1))
+
     # Step 1: Markdown -> HTML (embed CSS)
     pandoc "$SRC" \
         --standalone \
-        --css "$CSS" \
+        "${CSS_ARGS[@]}" \
         --embed-resources \
         --metadata title=" " \
         -o "${BASE}.html"
 
     # Step 2: HTML -> PDF. Binary-search the CSS --fill knob for the roomiest
     # spacing that still fits on one page (set FILL=1 to skip and use the CSS as-is).
-    RESULT=$(FILL="${FILL:-}" "$PYTHON" - "${BASE}.html" "${BASE}.pdf" 2>/dev/null <<'PY'
+    RESULT=$(FILL="${FILL:-}" TARGET_PAGES="$TARGET_PAGES" "$PYTHON" - "${BASE}.html" "${BASE}.pdf" 2>/dev/null <<'PY'
 import os, sys
 from weasyprint import HTML, CSS
 
 html = HTML(sys.argv[1])
 MIN_FILL, MAX_FILL = 0.5, 6.0
+TARGET = int(os.environ.get("TARGET_PAGES", "1"))
 
 def render(fill):
     return html.render(stylesheets=[CSS(string=f":root {{ --fill: {fill:.3f} !important }}")])
@@ -68,15 +79,15 @@ else:
     lo, hi = MIN_FILL, MAX_FILL
     best = render(lo)
     fill = lo
-    if len(best.pages) == 1:
+    if len(best.pages) <= TARGET:
         top = render(hi)
-        if len(top.pages) == 1:
+        if len(top.pages) <= TARGET:
             best, fill = top, hi
         else:
             for _ in range(10):
                 mid = (lo + hi) / 2
                 doc = render(mid)
-                if len(doc.pages) == 1:
+                if len(doc.pages) <= TARGET:
                     lo, best, fill = mid, doc, mid
                 else:
                     hi = mid
@@ -93,8 +104,8 @@ PY
 
     echo "  ✓ ${BASE}.pdf generated (spacing ×${FILL_USED})"
     echo "  ✓ output/${VERSION_ID}/${NAME}.pdf saved"
-    if [[ "$PAGES" -gt 1 ]]; then
-        echo "  ⚠ ${BASE}.pdf is ${PAGES} pages even at the tightest spacing — see \"Fit on one page\" in the README"
+    if [[ "$PAGES" -gt "$TARGET_PAGES" ]]; then
+        echo "  ⚠ ${BASE}.pdf is ${PAGES} pages (target ${TARGET_PAGES}) even at the tightest spacing — see \"Fit on one page\" in the README"
     fi
 done
 

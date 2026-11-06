@@ -73,12 +73,21 @@ If `make resume` still warns that you're over one page, you have more than fits 
 
 Prefer fixed spacing? Run `FILL=1 ./build.sh private/resume.md` to use `resume.css` exactly as written.
 
+**Want a deliberate second page?** (e.g. a detailed skills/keyword page for applicant tracking systems) Put this line in your `.md` where page 2 should start:
+
+```html
+<div class="page-break"></div>
+```
+
+Each page break adds one page to the target, so spacing is still tuned to fill the pages exactly.
+
 ## Customizing the look
 
 All styling is in `resume.css`. Common changes:
 
 - **Font**: change the `font-family` line — e.g. `"EB Garamond", "Garamond", serif` for traditional, or `"Inter", "Helvetica", sans-serif` for modern.
 - **Size**: change `font-size` (default `10pt`).
+- **Per-resume theme**: put a CSS file next to your resume with the same name (e.g. `private/resume.css` for `private/resume.md`). It's layered on top of `resume.css`, so you only write the rules you want to change.
 
 ## All commands
 

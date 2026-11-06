@@ -178,6 +178,8 @@ strong { font-weight: 700; color: #111; }
 em { font-style: italic; }
 
 /* Page break */
+/* Put <div class="page-break"></div> in your .md to start a new page */
+.page-break { break-before: page; height: 0; margin: 0; }
 h1, h2 { page-break-after: avoid; }
 li, table { page-break-inside: avoid; }
 body > ul > li { page-break-inside: avoid; }
