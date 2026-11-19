@@ -13,6 +13,8 @@
 # it warns if the content cannot fit on one page. FILL=1 ./build.sh disables tuning.
 # Each <div class="page-break"></div> in the .md adds one page to the target.
 # If foo.css sits next to foo.md, it is layered on top of resume.css (a per-resume theme).
+# Profiles: a .md starting with <!-- base: path.md --> overrides named blocks of that base
+# (see profile.py); it uses its own .css if present, otherwise the base's.
 
 set -e
 
@@ -43,16 +45,21 @@ for SRC in "$@"; do
 
     echo "→ Building ${SRC}..."
 
-    # Optional per-resume theme layered over the base CSS
+    # Step 0: resolve profile/base blocks into plain Markdown
+    RESOLVED="$("$PYTHON" "${SCRIPT_DIR}/profile.py" "$SRC")"
+    ROOT_SRC="$("$PYTHON" "${SCRIPT_DIR}/profile.py" --base "$SRC")"
+
+    # Optional per-resume theme layered over the base CSS (profile's own, else its base's)
     CSS_ARGS=(--css "$CSS")
-    [[ -f "${BASE}.css" ]] && CSS_ARGS+=(--css "${BASE}.css")
+    if [[ -f "${BASE}.css" ]]; then CSS_ARGS+=(--css "${BASE}.css")
+    elif [[ -f "${ROOT_SRC%.md}.css" ]]; then CSS_ARGS+=(--css "${ROOT_SRC%.md}.css"); fi
 
     # Target page count = 1 + number of explicit page breaks
-    BREAKS=$(grep -c 'class="page-break"' "$SRC" || true)
+    BREAKS=$(grep -c 'class="page-break"' <<< "$RESOLVED" || true)
     TARGET_PAGES=$((BREAKS + 1))
 
     # Step 1: Markdown -> HTML (embed CSS)
-    pandoc "$SRC" \
+    pandoc -f markdown <<< "$RESOLVED" \
         --standalone \
         "${CSS_ARGS[@]}" \
         --embed-resources \

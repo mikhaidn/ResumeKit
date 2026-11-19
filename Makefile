@@ -7,20 +7,25 @@ SOURCE := resume.md
 else
 SOURCE := $(MY_RESUME)
 endif
+# `make resume PROFILE=acme` builds private/profiles/acme.md instead
+ifneq ($(PROFILE),)
+SOURCE := private/profiles/$(PROFILE).md
+endif
 PDF := $(SOURCE:.md=.pdf)
 
 VENV := venv
 STAMP := $(VENV)/.installed
 
 .DEFAULT_GOAL := help
-.PHONY: help setup start resume open example clean
+.PHONY: help setup start profile resume open example clean
 
 help:
 	@echo "ResumeKit"
 	@echo ""
 	@echo "  make setup    Install everything needed (one time)"
 	@echo "  make start    Copy the example to $(MY_RESUME) for you to edit"
-	@echo "  make resume   Build your PDF and open it"
+	@echo "  make profile NAME=acme   Start a tailored version in private/profiles/acme.md"
+	@echo "  make resume   Build your PDF and open it (add PROFILE=acme for a tailored one)"
 	@echo "  make example  Build the example resume.pdf"
 	@echo "  make clean    Delete generated files (never touches your .md)"
 	@echo ""
@@ -44,6 +49,11 @@ start:
 	@if [ -f $(MY_RESUME) ]; then echo "$(MY_RESUME) already exists — not overwriting it."; \
 	else mkdir -p private && cp resume.md $(MY_RESUME) && echo "✓ Created $(MY_RESUME). Open it in any text editor, then run: make resume"; fi
 
+profile:
+	@if [ -z "$(NAME)" ]; then echo "Usage: make profile NAME=acme"; exit 1; fi
+	@python3 profile.py --new $(MY_RESUME) private/profiles/$(NAME).md
+	@echo "  Edit it, then run: make resume PROFILE=$(NAME)"
+
 resume: $(STAMP)
 	@./build.sh $(SOURCE)
 	@$(MAKE) --no-print-directory open
@@ -57,4 +67,4 @@ example: $(STAMP)
 	@./build.sh resume.md
 
 clean:
-	rm -rf output *.pdf *.html private/*.pdf private/*.html
+	rm -rf output *.pdf *.html private/*.pdf private/*.html private/profiles/*.pdf private/profiles/*.html

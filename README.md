@@ -61,6 +61,36 @@ The file uses [Markdown](https://www.markdownguide.org/basic-syntax/), a simple 
 
 Keep bold for things you want a reader to spot while skimming (numbers, key results) — bolding whole sentences makes everything look equally important.
 
+## Tailoring for a specific job
+
+Keep one **base** resume and make small **profiles** that swap out only what changes per job (headline, summary, a few bullets, keywords).
+
+**1. Mark the swappable parts** of `private/resume.md` with named blocks:
+
+```markdown
+<!-- block: summary -->
+Your general summary...
+<!-- /block -->
+```
+
+The markers never appear in the PDF, so you can wrap anything — a heading, a paragraph, or a group of bullets.
+
+**2. Start a profile** (it copies every block from your base so you can edit them):
+
+```bash
+make profile NAME=acme
+```
+
+**3. Edit `private/profiles/acme.md`.** Change the blocks you want and delete the ones you don't — anything you delete comes from the base. Fixes you make to the base show up in every profile on the next build.
+
+**4. Build it:**
+
+```bash
+make resume PROFILE=acme
+```
+
+The PDF is saved as `private/profiles/acme.pdf`. It uses the base's styling unless you add `private/profiles/acme.css`.
+
 ## Fit on one page
 
 You don't have to fiddle with spacing: every build automatically stretches or squeezes the gaps between lines and sections so your resume fills exactly one page. A short resume gets airy; a long one gets tightened.
@@ -96,6 +126,8 @@ All styling is in `resume.css`. Common changes:
 | `make setup`   | Install everything needed (one time)                  |
 | `make start`   | Create `private/resume.md` from the example           |
 | `make resume`  | Build your PDF and open it                            |
+| `make profile NAME=acme` | Start a tailored version in `private/profiles/acme.md` |
+| `make resume PROFILE=acme` | Build a tailored version |
 | `make example` | Build the example `resume.pdf`                        |
 | `make clean`   | Delete generated PDFs (never touches your `.md` files) |
 
