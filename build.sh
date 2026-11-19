@@ -15,6 +15,7 @@
 # If foo.css sits next to foo.md, it is layered on top of resume.css (a per-resume theme).
 # Profiles: a .md starting with <!-- base: path.md --> overrides named blocks of that base
 # (see profile.py); it uses its own .css if present, otherwise the base's.
+# Themes: <!-- theme: modern-navy --> in the .md (or its base) layers themes/modern-navy.css.
 
 set -e
 
@@ -51,6 +52,11 @@ for SRC in "$@"; do
 
     # Optional per-resume theme layered over the base CSS (profile's own, else its base's)
     CSS_ARGS=(--css "$CSS")
+    THEME=$(sed -n 's/^[[:space:]]*<!--[[:space:]]*theme:[[:space:]]*\([A-Za-z0-9_-]*\)[[:space:]]*-->.*/\1/p' <<< "$RESOLVED" | head -1)
+    if [[ -n "$THEME" ]]; then
+        [[ -f "${SCRIPT_DIR}/themes/${THEME}.css" ]] || { echo "Error: theme '${THEME}' not found in themes/"; exit 1; }
+        CSS_ARGS+=(--css "${SCRIPT_DIR}/themes/${THEME}.css")
+    fi
     if [[ -f "${BASE}.css" ]]; then CSS_ARGS+=(--css "${BASE}.css")
     elif [[ -f "${ROOT_SRC%.md}.css" ]]; then CSS_ARGS+=(--css "${ROOT_SRC%.md}.css"); fi
 

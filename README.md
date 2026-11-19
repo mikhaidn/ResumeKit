@@ -113,6 +113,21 @@ Each page break adds one page to the target, so spacing is still tuned to fill t
 
 ## Customizing the look
 
+**Themes**: add one line at the top of your resume to switch the whole look:
+
+```markdown
+<!-- theme: modern-navy -->
+```
+
+| Theme         | Look |
+| ------------- | ---- |
+| *(none)*      | The default: serif, left-aligned |
+| `modern-navy` | Arial, large left-aligned name, one deep-navy accent, hairline section rules |
+| `challenger`  | Arial, centered caps name, light centered section bands (classic career-center style) |
+
+Tailored versions (profiles) use their base resume's theme automatically. Themes live in `themes/`; copy one to make your own.
+
+
 All styling is in `resume.css`. Common changes:
 
 - **Font**: change the `font-family` line — e.g. `"EB Garamond", "Garamond", serif` for traditional, or `"Inter", "Helvetica", sans-serif` for modern.

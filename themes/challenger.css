@@ -1,0 +1,160 @@
+/* Theme: "Refined Challenger".
+   Same bones as the coach's Word draft (Arial, centered caps name, centered
+   section headings) but lighter, crisper and with a clearer reading order.
+   Use it by putting <!-- theme: challenger --> in your .md. Grayscale only. */
+
+@page { margin: 0.5in 0.55in; }
+
+html, body {
+  font-family: "Arial", "Liberation Sans", "Helvetica", sans-serif;
+  font-size: 9.75pt;
+  color: #222;
+  font-variant-numeric: tabular-nums;
+}
+p, li { color: #222; }
+strong { color: #000; }
+
+/* ---------- Header ---------- */
+h1 {
+  font-family: inherit;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 21pt;
+  font-weight: 700;
+  letter-spacing: 3pt;
+  color: #000;
+  margin: 0 0 calc(2pt * var(--fill)) 0;
+}
+
+h1 + h2 {
+  font-family: inherit;
+  text-align: center;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10.5pt;
+  color: #444;
+  letter-spacing: 0.4pt;
+  text-transform: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 calc(3pt * var(--fill)) 0;
+}
+
+body > table:first-of-type {
+  width: auto;
+  margin: 0 auto calc(4pt * var(--fill)) auto;
+}
+body > table:first-of-type td {
+  font-size: 9pt;
+  padding: 0 3pt;
+  color: #333;
+}
+body > table:first-of-type td:nth-child(even) { color: #aaa; }
+
+/* ---------- Section headings: centered caps between hairlines ---------- */
+h2 {
+  font-family: inherit;
+  text-align: center;
+  font-size: 9.5pt;
+  font-weight: 700;
+  letter-spacing: 0.9pt;   /* >1pt makes pdftotext/ATS read "E D U C AT I O N" */
+  color: #000;
+  background: #f1f1f1;
+  border-top: 0.5pt solid #9a9a9a;
+  border-bottom: 0.5pt solid #9a9a9a;
+  padding: calc(1.6pt * var(--fill)) 0 calc(1.2pt * var(--fill)) 0.9pt;
+  margin: calc(8pt * var(--fill)) 0 calc(3.5pt * var(--fill)) 0;
+}
+
+/* ---------- Company / dates / role ---------- */
+body > table:not(:first-of-type) {
+  margin: calc(7pt * var(--fill)) 0 0 0;
+}
+body > table:not(:first-of-type) td:first-child {
+  font-size: 9.75pt;
+  color: #444;
+}
+body > table:not(:first-of-type) td:first-child strong {
+  font-size: 10.25pt;
+  text-transform: uppercase;
+  letter-spacing: 0.6pt;
+  color: #000;
+}
+body > table:not(:first-of-type) td:last-child {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 9.5pt;
+  color: #000;
+  vertical-align: top; padding-top: 0.75pt;  /* aligns date baseline with the larger company name */
+}
+
+/* Role line: muted context, title stays bold */
+body > table + p {
+  margin: calc(1pt * var(--fill)) 0 calc(2pt * var(--fill)) 0;
+  color: #444;
+}
+body > table + p strong { color: #000; }
+
+/* Sub-headings inside a job */
+body > ul > li:has(> ul) {
+  margin-top: calc(4pt * var(--fill));
+}
+body > ul > li:has(> ul) > strong:first-child {
+  font-family: inherit;
+  font-size: 9.75pt;
+  font-style: italic;
+  font-weight: 700;
+  color: #000;
+  letter-spacing: 0.1pt;
+  margin-bottom: calc(1.5pt * var(--fill));
+}
+
+/* ---------- Bullets: consistent vertical position ---------- */
+body > ul > li,
+body > ul > li > ul > li { padding-left: 12pt; }
+body > ul > li::before,
+body > ul > li > ul > li::before {
+  content: "•";
+  top: 0;
+  left: 2pt;
+  font-size: 9.75pt;
+  line-height: inherit;
+  color: #000;
+}
+body > ul > li:has(> ul) { padding-left: 0; }
+
+/* Education: entries read like the company lines (bold degree, muted rest) */
+h2#education + ul > li { color: #444; }
+
+/* Core Skills: one quiet line, centered like the header */
+h2#core-skills + ul { margin-top: calc(3pt * var(--fill)); }
+h2#core-skills + ul > li {
+  padding-left: 0;
+  text-align: center;
+  color: #333;
+  word-spacing: 0.4pt;
+  padding: 0 28pt;          /* narrower measure: keeps "Distributed Systems" together */
+}
+h2#core-skills + ul > li::before { content: none; }
+
+/* ---------- Page 2 ---------- */
+p.page-name {
+  text-align: right;
+  font-size: 8.5pt;
+  color: #777;
+  letter-spacing: 0.3pt;
+  margin: 0 0 8pt 0;
+}
+/* Page 2 has room to spare: let the keyword list breathe a little */
+h2#technical-skills-keywords + ul > li,
+h2#additional-experience + ul > li { margin: 3pt 0; }
+h2#technical-skills-keywords + ul > li { color: #333; }
+h2#additional-experience { margin-top: 12pt; }
+
+p.ats-note {
+  text-align: center;
+  font-style: italic;
+  font-size: 8.75pt;
+  color: #555;
+}

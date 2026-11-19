@@ -1,0 +1,168 @@
+/* Theme: "Modern Navy".
+   Left-aligned, one restrained accent (deep navy), hierarchy carried by size,
+   weight and color instead of boxes. Still Arial (Mac) / Liberation Sans (Linux),
+   metric-identical, so the layout is the same on both. Prints cleanly in grayscale.
+   Use it by putting <!-- theme: modern-navy --> in your .md. */
+
+:root {
+  --accent: #1d3a5f;      /* deep navy: reads as near-black in grayscale */
+  --rule:   #b9c3cf;      /* light blue-gray hairline */
+  --ink:    #1f1f1f;
+  --muted:  #4d4d4d;
+}
+
+@page { margin: 0.5in 0.55in; }
+
+html, body {
+  font-family: "Arial", "Liberation Sans", "Helvetica", sans-serif;
+  font-size: 9.75pt;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+p, li { color: var(--ink); }
+strong { color: #000; }
+
+/* ---------- Header: left-aligned, name in accent ---------- */
+h1 {
+  font-family: inherit;
+  text-align: left;
+  text-transform: none;
+  font-size: 25pt;
+  font-weight: 700;
+  letter-spacing: 0.2pt;
+  line-height: 1.05;
+  color: var(--accent);
+  margin: 0 0 calc(2pt * var(--fill)) 0;
+}
+
+h1 + h2 {
+  font-family: inherit;
+  text-align: left;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11.5pt;
+  color: #333;
+  letter-spacing: 0.2pt;
+  text-transform: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 0 calc(3pt * var(--fill)) 0;
+}
+
+/* Contact line spans the page and closes the header with an accent rule */
+body > table:first-of-type {
+  width: 100%;
+  margin: 0 0 calc(2pt * var(--fill)) 0;
+  border-bottom: 1.5pt solid var(--accent);
+}
+body > table:first-of-type td {
+  font-size: 9pt;
+  padding: 0 4pt calc(5pt * var(--fill)) 4pt;
+  color: #333;
+  white-space: nowrap;
+}
+body > table:first-of-type td:first-child { padding-left: 0; }
+body > table:first-of-type td:last-child { width: 100%; }
+body > table:first-of-type td:nth-child(even) { color: #a8b3c0; }
+
+/* ---------- Section headings: left caps in accent over a hairline ---------- */
+h2 {
+  font-family: inherit;
+  text-align: left;
+  font-size: 9.75pt;
+  font-weight: 700;
+  letter-spacing: 0.9pt;   /* >1pt makes pdftotext/ATS read "E D U C AT I O N" */
+  color: var(--accent);
+  background: none;
+  border-top: none;
+  border-bottom: 0.75pt solid var(--rule);
+  padding: 0 0 calc(1.5pt * var(--fill)) 0;
+  margin: calc(9pt * var(--fill)) 0 calc(3.5pt * var(--fill)) 0;
+}
+
+/* ---------- Company / dates / role ---------- */
+body > table:not(:first-of-type) {
+  margin: calc(8pt * var(--fill)) 0 0 0;
+}
+body > table:not(:first-of-type) td:first-child {
+  font-size: 9.75pt;
+  color: var(--muted);
+}
+body > table:not(:first-of-type) td:first-child strong {
+  font-size: 11pt;
+  text-transform: none;
+  letter-spacing: 0.1pt;
+  color: #000;
+}
+body > table:not(:first-of-type) td:last-child {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 9.5pt;
+  color: var(--accent);
+  vertical-align: top; padding-top: 1.5pt;   /* aligns date baseline with the larger company name */
+  letter-spacing: 0.2pt;
+}
+
+/* Role line */
+body > table + p {
+  margin: calc(1pt * var(--fill)) 0 calc(2pt * var(--fill)) 0;
+  color: var(--muted);
+}
+body > table + p strong { color: #000; }
+
+/* Sub-headings inside a job: accent, no italics */
+body > ul > li:has(> ul) {
+  margin-top: calc(4pt * var(--fill));
+}
+body > ul > li:has(> ul) > strong:first-child {
+  font-family: inherit;
+  font-size: 9.75pt;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.15pt;
+  margin-bottom: calc(1.5pt * var(--fill));
+}
+
+/* ---------- Bullets: accent, consistent vertical position ---------- */
+body > ul > li,
+body > ul > li > ul > li { padding-left: 12pt; }
+body > ul > li::before,
+body > ul > li > ul > li::before {
+  content: "•";
+  top: 0;
+  left: 2pt;
+  font-size: 9.75pt;
+  line-height: inherit;
+  color: var(--accent);
+}
+body > ul > li:has(> ul) { padding-left: 0; }
+
+h2#education + ul > li { color: var(--muted); }
+
+/* Core Skills: no bullet; the key skills pick up the accent */
+h2#core-skills + ul { margin-top: calc(3.5pt * var(--fill)); }
+h2#core-skills + ul > li { padding-left: 0; padding-right: 40pt; color: #333; } /* keeps "Distributed Systems" together */
+h2#core-skills + ul > li::before { content: none; }
+h2#core-skills + ul strong { color: var(--accent); }
+
+/* ---------- Page 2 ---------- */
+p.page-name {
+  text-align: right;
+  font-size: 8.5pt;
+  color: #6b7785;
+  letter-spacing: 0.3pt;
+  margin: 0 0 8pt 0;
+}
+h2#technical-skills-keywords { margin-top: 2pt; }
+h2#technical-skills-keywords + ul > li,
+h2#additional-experience + ul > li { margin: 3pt 0; }
+h2#technical-skills-keywords + ul > li { color: #333; }
+h2#additional-experience { margin-top: 13pt; }
+
+p.ats-note {
+  font-style: italic;
+  font-size: 8.75pt;
+  color: #555;
+}
